@@ -1,0 +1,3 @@
+brt/Au6E7aeNpS79B6oM
+
+mongodb+srv://brt:Au6E7aeNpS79B6oM@brt.dqedv2t.mongodb.net/

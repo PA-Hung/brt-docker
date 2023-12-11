@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx-fe
+    build:
+      context: ./fe
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+
+  db-mongo:
+    container_name: mongo-db
+    image: mongo:4.4 # MongDB 4.4, không có AVX yêu cầu
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Pvmq1gpJMSGE
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+    expose:
+      - "27017"
+
+  backend:
+    container_name: nest-be
+    build:
+      context: ./be
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - MONGO_URL=mongodb://root:Pvmq1gpJMSGE@db-mongo:27017/hoidanit?authSource=admin
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db-mongo
+
+volumes:
+  mongodb:

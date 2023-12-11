@@ -1,0 +1,43 @@
+npm install --save-exact dotenv
+npm i --save-exact bcryptjs@2.4.3
+npm i --save-dev @types/bcryptjs@2.4.2
+npm i --save-exact class-validator@0.14.0 class-transformer@0.5.1
+
+nest g resource workdays --no-spec
+
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+    userId: mongoose.Schema.Types.ObjectId;
+
+    @Prop()
+    workDate: string;
+
+    @Prop()
+    noteAM: string;
+
+    @Prop()
+    notePM: string;
+-------------------------
+    @IsNotEmpty()
+    @IsMongoId()
+    userId: mongoose.Schema.Types.ObjectId;
+
+    workDate: string;
+
+    noteAM: string;
+
+    notePM: string;
+-----------------------
+  async create(createWorktimeDto: CreateWorktimeDto, userInfo: IUser) {
+    const workTimeRes = await this.worktimeModel.create({
+      ...createWorktimeDto,
+      createdBy: {
+        _id: userInfo._id,
+        phone: userInfo.phone
+      }
+    })
+    return {
+      _id: workTimeRes._id,
+      createdAt: workTimeRes.createdAt
+    }
+  }
+-------------------------------
